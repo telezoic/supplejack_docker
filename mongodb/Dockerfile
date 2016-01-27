@@ -25,10 +25,10 @@ WORKDIR /data
 CMD ["mongod"]
 
 # Import data
-COPY manager-data.json /manager-data.json
-COPY worker-data.json /worker-data.json
-COPY api-data.json /api-data.json
-CMD mongoimport --host mongodb --db harvester_development --collection MyDummyCollection --type json --file /init.json --jsonArray
+# COPY manager-data.json /manager-data.json
+# COPY worker-data.json /worker-data.json
+# COPY api-data.json /api-data.json
+# CMD mongoimport --host mongodb --db harvester_development --collection MyDummyCollection --type json --file /init.json --jsonArray
 
 # Expose ports.
 #   - 27017: process
