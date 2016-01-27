@@ -1,4 +1,4 @@
-manager/*
-worker/*
-api/*
-data/*
+manager/
+worker/
+api/
+data/
