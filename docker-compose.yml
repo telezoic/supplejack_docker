@@ -1,36 +1,4 @@
 # -------------------------------- 
-# Applications
-# -------------------------------- 
-mongodb:
-  build: ./mongodb
-  container_name: mongodb
-  volumes:
-    - ./data/db:/data/db
-manager:
-  build: ./manager
-  command: "bundle exec rails s -p 3000 -b '0.0.0.0' && rake docker:seed"
-  ports:
-    - '3001:3000'
-  container_name: manager
-  # volumes_from:
-  #   - bundle
-  restart: always
-worker:
-  build: ./worker
-  command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  ports:
-    - '3002:3000'
-  container_name: worker
-  # This tells the web container to mount the `bundle` images'
-  # /bundle volume to the `web` containers /bundle path.
-  # volumes_from:
-  #   - bundle
-  restart: always
-  environment:
-    # VIRTUAL_HOST: worker.docker
-    # REDIS_HOST: redis.weave.local
-
-# -------------------------------- 
 # Services
 # -------------------------------- 
 redis:
@@ -46,3 +14,27 @@ sidekiq:
   restart: always
   environment:
     REDIS_HOST: redis.weave.local
+mongodb:
+  build: ./mongodb
+  container_name: mongodb
+  volumes:
+    - ./data/db:/data/db
+
+# -------------------------------- 
+# Applications
+# -------------------------------- 
+manager:
+  build: ./manager
+  command: "bundle exec rails s -p 3000 -b '0.0.0.0' && rake docker:seed"
+  ports:
+    - '3001:3000'
+  container_name: manager
+  restart: always
+worker:
+  build: ./worker
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  ports:
+    - '3002:3000'
+  container_name: worker
+  restart: always
+
