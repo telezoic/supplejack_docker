@@ -23,6 +23,13 @@ mongodb:
 # -------------------------------- 
 # Applications
 # -------------------------------- 
+api:
+  build: ./api
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  ports:
+    - '80:3000'
+  container_name: api
+  restart: always
 manager:
   build: ./manager
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
