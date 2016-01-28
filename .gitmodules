@@ -6,4 +6,4 @@
 	url = git@github.com:DigitalNZ/supplejack_worker.git
 [submodule "api"]
 	path = api
-	url = git@github.com:DigitalNZ/supplejack_api.git
+	url = git@github.com:DigitalNZ/supplejack_api_app.git
