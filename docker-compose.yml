@@ -14,6 +14,11 @@ sidekiq:
   restart: always
   environment:
     REDIS_HOST: redis.weave.local
+solr:
+  image: solr
+  ports:
+    - '8983:8983'
+  container_name: solr
 mongodb:
   build: ./mongodb
   container_name: mongodb
@@ -23,13 +28,17 @@ mongodb:
 # -------------------------------- 
 # Applications
 # -------------------------------- 
-# api:
-#   build: ./api
-#   command: bundle exec rails s -p 3000 -b '0.0.0.0'
-#   ports:
-#     - '80:3000'
-#   container_name: api
-#   restart: always
+api:
+  build: ./api
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  ports:
+    - '3000:3000'
+  container_name: api
+  restart: always
+  environment:
+    MONGOID_HOSTS: mongodb.weave.local:27017
+    SOLR_PING: 'http://solr.weave.local:8983/solr/admin/ping'
+    WORKER_API_URL: 'http://worker.weave.local:3002'
 manager:
   build: ./manager
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -37,6 +46,11 @@ manager:
     - '3001:3000'
   container_name: manager
   restart: always
+  environment:
+    WORKER_HOST: http://worker.weave.local:3000
+    WORKER_API_KEY: workerkey
+    API_HOST: http://api.weaver.local:3000
+    API_MONGOID_HOSTS: mongodb.weave.local:27017
 worker:
   build: ./worker
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -44,4 +58,8 @@ worker:
     - '3002:3000'
   container_name: worker
   restart: always
-
+  environment:
+    MANAGER_HOST: http://manager.weave.local:3001
+    MANAGER_API_KEY: managerkey
+    API_HOST: http://api.weave.local:3000
+    API_MONGOID_HOSTS: mongodb.weave.local:27017
