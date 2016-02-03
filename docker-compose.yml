@@ -14,8 +14,13 @@ sidekiq:
   restart: always
   environment:
     REDIS_HOST: redis.weave.local
+# solr:
+#   image: makuk66/docker-solr:4.10.4
+#   ports:
+#     - '8983:8983'
+#   container_name: solr
 solr:
-  image: solr
+  build: ./solr
   ports:
     - '8983:8983'
   container_name: solr
@@ -37,8 +42,10 @@ api:
   restart: always
   environment:
     MONGOID_HOSTS: mongodb.weave.local:27017
-    SOLR_PING: 'http://solr.weave.local:8983/solr/admin/ping'
-    WORKER_API_URL: 'http://worker.weave.local:3002'
+    SOLR_PING: http://solr.weave.local:8983/solr/admin/ping
+    SOLR_URL: http://solr.weave.local:8983/solr
+    WORKER_API_URL: http://worker.weave.local:3000
+    HARVESTER_IPS: 'worker.weave.local, manager.weave.local'
 manager:
   build: ./manager
   command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -59,7 +66,7 @@ worker:
   container_name: worker
   restart: always
   environment:
-    MANAGER_HOST: http://manager.weave.local:3001
+    MANAGER_HOST: http://manager.weave.local:3000
     MANAGER_API_KEY: managerkey
     API_HOST: http://api.weave.local:3000
     API_MONGOID_HOSTS: mongodb.weave.local:27017
