@@ -109,7 +109,7 @@ Redis: redis://redis.weave.local:6379/0
 ```
 
 ##### Stop Docker containers and cleanup
-Everytime you stop Docker containers, it is ideal to remove them as well. 
+Everytime you stop Docker containers, it is ideal to remove them as well. This is because everytime you run `docker-compose up`, it will create new docker containers. This is normal, but annoying because it will also run old docker containers.
 
 `> docker-compose stop && docker-compose rm -v`
 
