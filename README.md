@@ -65,6 +65,13 @@ Note: You need to run these commands for each iTerm/Terminal tabs you make. I su
 ##### Go to project directory
 `> cd supplejack_docker`
 
+##### Copy your ssh key to api, worker and manager
+```bash
+> cp ~/.ssh/id_rsa api/id_rsa
+> cp ~/.ssh/id_rsa manager/id_rsa
+> cp ~/.ssh/id_rsa worker/id_rsa
+```
+
 ##### Build Docker containers (This will take a while)
 `> docker-compose build`
 
