@@ -72,6 +72,8 @@ Note: You need to run these commands for each iTerm/Terminal tabs you make. I su
 > cp ~/.ssh/id_rsa worker/id_rsa
 ```
 
+If you don't have one, refer to this [link](https://help.github.com/articles/generating-an-ssh-key/) to create one.
+
 ##### Build Docker containers (This will take a while)
 `> docker-compose build`
 
