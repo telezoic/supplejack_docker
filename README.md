@@ -40,6 +40,7 @@ CONTAINER ID        IMAGE                           COMMAND                  CRE
 
 ##### Launch Weave
 `> weave launch`
+
 `> eval $(weave env)`
 
 ##### Verify all docker networking services is running
