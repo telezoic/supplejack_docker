@@ -53,7 +53,7 @@ ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   47 
 4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago          Up 2 days           0.0.0.0:80->80/tcp, 443/tcp   dinghy_http_proxy
 ```
 
-Note: You need to run these commands for each iTerm/Terminal tabs you make. I suggest you modify your `~/.bash_profile` or `~/.zshrc` file to automate these commands.
+Note: You need to run these commands for each iTerm/Terminal tabs you make to initialize docker daemon and weave. I suggest you modify your `~/.bash_profile` or `~/.zshrc` file to automate these commands.
 
 ```bash
 > eval $(dinghy shellinit)
