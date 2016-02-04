@@ -31,7 +31,7 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
 ##### Create a new dinghy VM
 `dinghy create --provider virtualbox`
 
-##### Verify that dinghy HTTP proxy container runs.
+##### Verify that dinghy HTTP proxy container is running
 `> docker ps`
 ```bash
 CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                         NAMES
@@ -44,7 +44,7 @@ CONTAINER ID        IMAGE                           COMMAND                  CRE
 > eval $(weave env)
 ```
 
-##### Verify all docker networking services is running
+##### Verify all networking services needed is running
 `> docker ps`
 ```bash
 CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                         NAMES
