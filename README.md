@@ -77,8 +77,25 @@ If you don't have one, refer to this [link](https://help.github.com/articles/gen
 ##### Build Docker containers (This will take a while)
 `> docker-compose build`
 
-##### Run Docker containers
+##### Run Docker containers (This will take a while as well)
 `> docker-compose up --no-recreate`
+
+If everything goes well, you should see all the containers running.
+
+```bash
+> docker ps
+CONTAINER ID        IMAGE                           COMMAND                  CREATED              STATUS              PORTS                         NAMES
+041abde3f0e5        supplejackdocker_sidekiq        "/w/w bundle exec sid"   About a minute ago   Up About a minute                                 sidekiq
+5a99010ee06e        redis:2.8                       "/w/w /entrypoint.sh "   About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp        redis
+95b8947516f3        supplejackdocker_mongodb        "/w/w mongod"            About a minute ago   Up About a minute   27017/tcp, 28017/tcp          mongodb
+5495d1b061fd        supplejackdocker_worker         "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3002->3000/tcp        worker
+79c17972ad94        supplejackdocker_solr           "/w/w java -jar start"   About a minute ago   Up About a minute   0.0.0.0:8983->8983/tcp        solr
+2ffe6b686f51        supplejackdocker_api            "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp        api
+a49c08cf69e5        supplejackdocker_manager        "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3001->3000/tcp        manager
+ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   2 days ago           Up 2 days                                         weaveproxy
+40770b440599        weaveworks/weave:1.4.2          "/home/weave/weaver -"   2 days ago           Up 2 days                                         weave
+4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago           Up 2 days           443/tcp, 0.0.0.0:80->80/tcp   dinghy_http_prox
+```
 
 ##### Access Supplejack components
 
