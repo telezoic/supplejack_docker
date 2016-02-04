@@ -80,6 +80,8 @@ If you don't have one, refer to this [link](https://help.github.com/articles/gen
 ##### Run Docker containers (This will take a while as well)
 `> docker-compose up --no-recreate`
 
+![docker-compose up](http://g.recordit.co/KwrKHds2S3.gif)
+
 If everything goes well, you should see all the containers running.
 
 ```bash
