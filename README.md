@@ -122,3 +122,14 @@ ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   2 d
 40770b440599        weaveworks/weave:1.4.2          "/home/weave/weaver -"   2 days ago          Up 2 days                                         weave
 4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago          Up 2 days           0.0.0.0:80->80/tcp, 443/tcp   dinghy_http_proxy
 ```
+
+### Questions/Issues?
+File a new [issue](https://github.com/DigitalNZ/supplejack_docker/issues/new) if you have questions or issues.
+
+### Contributing
+
+1. Fork it ( https://github.com/DigitalNZ/supplejack_docker/fork )
+2. Create your feature branch (`git checkout -b my-awesome-feature`)
+3. Commit your changes (`git commit -am 'Added my awesome feature!'`)
+4. Push to the branch (`git push origin my-awesome-feature`)
+5. Create a new Pull Request
