@@ -71,9 +71,13 @@ Note: You need to run these commands for each iTerm/Terminal tabs you make. I su
 
 ##### Access Supplejack components
 API: `api.docker:3000`
+
 Manager: `manager.docker:3001`
+
 Worker: `worker.docker:3002/sidekiq`
+
 Solr: `solr.docker:8983/solr/#/collection1`
+
 MongoDB Data: Mounted in host `data/db`
 
 ##### Stop Docker containers and cleanup
