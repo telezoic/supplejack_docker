@@ -39,9 +39,10 @@ CONTAINER ID        IMAGE                           COMMAND                  CRE
 ```
 
 ##### Launch Weave
-`> weave launch`
-
-`> eval $(weave env)`
+```bash
+> weave launch
+> eval $(weave env)
+```
 
 ##### Verify all docker networking services is running
 `> docker ps`
@@ -71,15 +72,15 @@ Note: You need to run these commands for each iTerm/Terminal tabs you make. I su
 `> docker-compose up --no-recreate`
 
 ##### Access Supplejack components
-API: `api.docker:3000`
 
-Manager: `manager.docker:3001`
-
-Worker: `worker.docker:3002/sidekiq`
-
-Solr: `solr.docker:8983/solr/#/collection1`
-
-MongoDB Data: Mounted in host `data/db`
+```
+API: api.docker:3000
+Manager: manager.docker:3001
+Worker: worker.docker:3002/sidekiq
+Solr: solr.docker:8983/solr/#/collection1
+MongoDB Data: Mounted in host data/db - mongodb.weave.local:27017
+Redis: redis://redis.weave.local:6379/0
+```
 
 ##### Stop Docker containers and cleanup
 Everytime you stop Docker containers, it is ideal to remove them as well. 
