@@ -1,5 +1,5 @@
 # Supplejack Docker
-Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis and Solr). 
+Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis and Solr).
 
 ### Features
 - Redis container
