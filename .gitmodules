@@ -7,3 +7,6 @@
 [submodule "api"]
 	path = api
 	url = git@github.com:DigitalNZ/supplejack_api_app.git
+[submodule "solr"]
+	path = solr
+	url = git@github.com:DigitalNZ/supplejack_solr.git
