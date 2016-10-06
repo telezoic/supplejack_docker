@@ -132,6 +132,6 @@ File a new [issue](https://github.com/DigitalNZ/supplejack_docker/issues/new) if
 
 1. Fork it ( https://github.com/DigitalNZ/supplejack_docker/fork )
 2. Create your feature branch (`git checkout -b my-awesome-feature`)
-3. Commit your changes (`git commit -am 'Added my awesome feature!'`)
+3. Commit your changes (`git commit -am 'Add my awesome feature!'`)
 4. Push to the branch (`git push origin my-awesome-feature`)
 5. Create a new Pull Request
