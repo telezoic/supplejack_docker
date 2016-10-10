@@ -21,7 +21,7 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
 2. Install [Docker Toolbox](https://docs.docker.com/mac/step_one/).
 3. Install [dinghy](https://github.com/codekitchen/dinghy).
 4. Install [Weave](https://github.com/weaveworks/weave).
-5. Clone this project. `git clone git@github.com:DigitalNZ/supplejack_docker.git`.
+5. Clone this project recursively. `git clone --recursive git@github.com:DigitalNZ/supplejack_docker.git`.
 
 ### Preparation
 
