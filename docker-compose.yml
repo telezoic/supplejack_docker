@@ -7,18 +7,21 @@ services:
     ports:
       - '6379:6379'
     restart: always
+
   solr:
     build: ./solr
     container_name: solr
     ports:
       - '8983:8983'
+
   mongodb:
-    image: mongo:2.6
+    image: mongo:2.6.12
     volumes:
-      - ./data/db:/data/db
+      - .:/data/db
     ports:
       - '27017:27017'
-    command: mongod --dbpath /data/db
+    command: mongod --dbpath /data/db --smallfiles
+
   sidekiq:
     build: ./worker
     command: bundle exec sidekiq
@@ -52,6 +55,22 @@ services:
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_HOST: redis://redis:6379/0
 
+  manager:
+    build: ./manager
+    command: bundle exec rails s -p 3000
+    ports:
+      - '3001:3000'
+    container_name: manager
+    restart: always
+    depends_on:
+      - mongodb
+      - worker
+    environment:
+      WORKER_HOST: http://worker:3002
+      WORKER_API_KEY: workerkey
+      API_HOST: http://api:3000
+      API_MONGOID_HOSTS: mongodb:27017
+
 
 # api:
 #   build: ./api
@@ -66,15 +85,4 @@ services:
 #     SOLR_URL: http://solr.weave.local:8983/solr
 #     WORKER_API_URL: http://worker.weave.local:3000
 #     HARVESTER_IPS: '10.32.0.1, 10.32.0.2, 10.32.0.3, 10.32.0.4, 10.32.0.5, 10.32.0.6, 10.32.0.7, manager.weave.local, worker.weave.local, manager.docker, worker.docker'
-# manager:
-#   build: ./manager
-#   command: bundle exec rails s -p 3000 -b '0.0.0.0'
-#   ports:
-#     - '3001:3000'
-#   container_name: manager
-#   restart: always
-#   environment: # Not working
-#     WORKER_HOST: http://worker.weave.local:3000
-#     WORKER_API_KEY: workerkey
-#     API_HOST: http://api.weaver.local:3000
-#     API_MONGOID_HOSTS: mongodb.weave.local:27017
+
