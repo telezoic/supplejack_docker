@@ -31,6 +31,7 @@ services:
     restart: always
     depends_on:
       - mongodb
+      - api
     networks:
       - backend
     environment:
@@ -50,6 +51,7 @@ services:
       - redis
       - mongodb
       - sidekiq
+      - api
     networks:
       - backend
     environment:
@@ -67,6 +69,7 @@ services:
     depends_on:
       - redis
       - mongodb
+      - api
     networks:
       - backend
     environment:
@@ -76,19 +79,23 @@ services:
       API_MONGOID_HOSTS: mongodb:27017
       REDIS_HOST: redis://redis:6379/0
 
-  # api:
-  #   build: ./api
-  #   command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  #   ports:
-  #     - '3000:3000'
-  #   container_name: api
-  #   restart: always
-  #   environment:
-  #     MONGOID_HOSTS: mongodb.weave.local:27017
-  #     SOLR_PING: http://solr.weave.local:8983/solr/admin/ping
-  #     SOLR_URL: http://solr.weave.local:8983/solr
-  #     WORKER_API_URL: http://worker.weave.local:3000
-  #     HARVESTER_IPS: '10.32.0.1, 10.32.0.2, 10.32.0.3, 10.32.0.4, 10.32.0.5, 10.32.0.6, 10.32.0.7, manager.weave.local, worker.weave.local, manager.docker, worker.docker'
+  api:
+    build: ./api
+    command: bundle exec rails s -p 3000
+    ports:
+      - '3000:3000'
+    container_name: api
+    restart: always
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+    environment:
+      MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8983/solr/admin/ping
+      SOLR_URL: http://solr:8983/solr
+      WORKER_API_URL: http://worker:3000
+      HARVESTER_IPS: '172.19.0.8, 172.19.0.6, 0.0.0.0, 127.0.0.1, 192.168.99.100, localhost'
 
 volumes:
   mongodb:
