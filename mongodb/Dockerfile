@@ -1,37 +1,19 @@
-#
-# MongoDB Dockerfile
-#
-# https://github.com/dockerfile/mongodb
-#
+FROM mongo
+MAINTAINER Benedict Aluan <benedict@boost.co.nz>
 
-# Pull base image.
-FROM library/ubuntu
+# Installation:
+# Import MongoDB public GPG key AND create a MongoDB list file
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+RUN echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-3.0.list
 
-# Install MongoDB.
-RUN \
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' > /etc/apt/sources.list.d/mongodb.list && \
-  apt-get update && \
-  apt-get install -y mongodb-org && \
-  rm -rf /var/lib/apt/lists/*
+# Update apt-get sources AND install MongoDB
+RUN apt-get update && apt-get install -y mongodb-org
 
-# Define mountable directories.
-VOLUME ["/data/db"]
+# Create the MongoDB data directory
+RUN mkdir -p /data/db
 
-# Define working directory.
-WORKDIR /data
-
-# Define default command.
-CMD ["mongod"]
-
-# Import data
-# COPY manager-data.json /manager-data.json
-# COPY worker-data.json /worker-data.json
-# COPY api-data.json /api-data.json
-# CMD mongoimport --host mongodb --db harvester_development --collection MyDummyCollection --type json --file /init.json --jsonArray
-
-# Expose ports.
-#   - 27017: process
-#   - 28017: http
+# Expose port 27017 from the container to the host
 EXPOSE 27017
-EXPOSE 28017
+
+# Set usr/bin/mongod as the dockerized entry-point application
+ENTRYPOINT ["/usr/bin/mongod"]

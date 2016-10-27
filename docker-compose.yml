@@ -1,72 +1,108 @@
-# -------------------------------- 
-# Services
-# -------------------------------- 
-redis:
-  image: redis:2.8
-  container_name: redis
-  ports:
-    - '6379:6379'
-  restart: always
-sidekiq:
-  build: ./worker
-  command: bundle exec sidekiq
-  container_name: sidekiq
-  restart: always
-  environment:
-    MANAGER_HOST: http://manager.weave.local:3000
-    MANAGER_API_KEY: managerkey
-    API_HOST: http://api.weave.local:3000
-    API_MONGOID_HOSTS: mongodb.weave.local:27017
-    REDIS_HOST: redis://redis.weave.local:6379/0
-solr:
-  build: ./solr
-  ports:
-    - '8983:8983'
-  container_name: solr
-mongodb:
-  build: ./mongodb
-  container_name: mongodb
-  volumes:
-    - ./data/db:/data/db
+version: '2'
 
-# -------------------------------- 
-# Applications
-# -------------------------------- 
-api:
-  build: ./api
-  command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  ports:
-    - '3000:3000'
-  container_name: api
-  restart: always
-  environment:
-    MONGOID_HOSTS: mongodb.weave.local:27017
-    SOLR_PING: http://solr.weave.local:8983/solr/admin/ping
-    SOLR_URL: http://solr.weave.local:8983/solr
-    WORKER_API_URL: http://worker.weave.local:3000
-    HARVESTER_IPS: '10.32.0.1, 10.32.0.2, 10.32.0.3, 10.32.0.4, 10.32.0.5, 10.32.0.6, 10.32.0.7, manager.weave.local, worker.weave.local, manager.docker, worker.docker'
-manager:
-  build: ./manager
-  command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  ports:
-    - '3001:3000'
-  container_name: manager
-  restart: always
-  environment: # Not working
-    WORKER_HOST: http://worker.weave.local:3000
-    WORKER_API_KEY: workerkey
-    API_HOST: http://api.weaver.local:3000
-    API_MONGOID_HOSTS: mongodb.weave.local:27017
-worker:
-  build: ./worker
-  command: bundle exec rails s -p 3000 -b '0.0.0.0'
-  ports:
-    - '3002:3000'
-  container_name: worker
-  restart: always
-  environment:
-    MANAGER_HOST: http://manager.weave.local:3000
-    MANAGER_API_KEY: managerkey
-    API_HOST: http://api.weave.local:3000
-    API_MONGOID_HOSTS: mongodb.weave.local:27017
-    REDIS_HOST: redis://redis.weave.local:6379/0 # Not working
+services:
+  redis:
+    image: redis:2.8
+    container_name: redis
+    restart: always
+    networks:
+      - backend
+    ports:
+      - 6379:6379
+
+  solr:
+    build: ./solr
+    container_name: solr
+    ports:
+      - '8983:8983'
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo:2.6.12
+    command: mongod --dbpath /data/db --smallfiles
+    networks:
+      - backend
+
+  manager:
+    build: ./manager
+    command: bundle exec rails s -p 3000
+    ports:
+      - '3001:3000'
+    container_name: manager
+    restart: always
+    depends_on:
+      - mongodb
+      - api
+    networks:
+      - backend
+    environment:
+      WORKER_HOST: http://worker:3000
+      WORKER_API_KEY: workerkey
+      API_HOST: http://api:3000
+      API_MONGOID_HOSTS: mongodb:27017
+
+  worker:
+    build: ./worker
+    command: bundle exec rails s -p 3000
+    ports:
+      - '3002:3000'
+    container_name: worker
+    restart: always
+    depends_on:
+      - redis
+      - mongodb
+      - api
+    networks:
+      - backend
+    environment:
+      MANAGER_HOST: http://manager:3000
+      MANAGER_API_KEY: managerkey
+      API_HOST: http://api:3000
+      API_MONGOID_HOSTS: mongodb:27017
+      REDIS_URL: redis://redis:6379/0
+
+  sidekiq:
+    build: ./worker
+    command: bundle exec sidekiq
+    container_name: sidekiq
+    restart: always
+    depends_on:
+      - redis
+      - mongodb
+      - api
+      - worker
+    networks:
+      - backend
+    environment:
+      MANAGER_HOST: http://manager:3000
+      MANAGER_API_KEY: managerkey
+      API_HOST: http://api:3000
+      API_MONGOID_HOSTS: mongodb:27017
+      REDIS_URL: redis://redis:6379/0
+
+  api:
+    build: ./api
+    command: bundle exec rails s -p 3000
+    ports:
+      - '3000:3000'
+    container_name: api
+    restart: always
+    depends_on:
+      - solr
+      - mongodb
+    networks:
+      - backend
+    environment:
+      MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8983/solr/admin/ping
+      SOLR_URL: http://solr:8983/solr
+      WORKER_API_URL: http://worker:3000
+
+volumes:
+  mongodb:
+
+networks:
+  backend:
+    driver: bridge
+
