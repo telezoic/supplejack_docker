@@ -4,133 +4,153 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
 ### Features
 - Redis container
 - Solr container
-- Data container (Linked to host machine for development)
+- Data container (Docker volumes)
 - Supplejack worker container
 - Supplejack manager container
 - Supplejack API container
 
 ### Prerequisites
-- Dinghy
-- Weave
+- Virtualbox
+- Docker
 - Docker Machine
 - Docker Compose
-- Virtualbox
 
 ### Getting Started
 1. Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
-2. Install [Docker Toolbox](https://docs.docker.com/mac/step_one/).
-3. Install [dinghy](https://github.com/codekitchen/dinghy).
-4. Install [Weave](https://github.com/weaveworks/weave).
-5. Clone this project recursively. `git clone --recursive git@github.com:DigitalNZ/supplejack_docker.git`.
+2. Install Docker, Docker Compose, Docker Machine and dependencies.
+
+    ```bash
+    → brew update && \
+      brew install go docker docker-machine docker-compose
+    ```
+
+3. Clone this project recursively.
+    
+    ```bash
+    → git clone --recursive git@github.com:digitalnz/supplejack_docker.git
+    ```
 
 ### Preparation
 
-##### Go to project directory
-`> cd supplejack_docker`
+1. Go to project directory.
 
-##### Create a new dinghy VM
-`dinghy create --provider virtualbox`
+    ```bash
+    → cd supplejack_docker
+    ```
 
-##### Verify that dinghy HTTP proxy container is running
-`> docker ps`
-```bash
-CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                         NAMES
-4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago          Up 2 days           0.0.0.0:80->80/tcp, 443/tcp   dinghy_http_proxy
-```
+2. Create a new Docker Machine.
+    
+    ```bash
+    → docker-machine create --driver=virtualbox supplejack-docker
+    ```
 
-##### Launch Weave
-```bash
-> weave launch
-> eval $(weave env)
-```
+3. Start the machine.
+    
+    ```bash
+    → docker-machine start supplejack-docker
+    ```
 
-##### Verify all networking services needed is running
-`> docker ps`
-```bash
-CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                         NAMES
-ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   47 hours ago        Up 47 hours                                       weaveproxy
-40770b440599        weaveworks/weave:1.4.2          "/home/weave/weaver -"   47 hours ago        Up 47 hours                                       weave
-4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago          Up 2 days           0.0.0.0:80->80/tcp, 443/tcp   dinghy_http_proxy
-```
+4. Run this command to configure your shell.
 
-Note: You need to run these commands for each iTerm/Terminal tabs you make to initialize docker daemon and weave. I suggest you modify your `~/.bash_profile` or `~/.zshrc` file to automate these commands.
+    ```bash
+    → eval $(docker-machine env supplejack-docker)
+    ```
 
-```bash
-> eval $(dinghy shellinit)
-> eval "$(weave env)"
-```
+5. Verify the `DOCKER_HOST`. It should return an IP address with port.
 
-### Running Docker Containers
+    ```bash
+    → echo $DOCKER_HOST
+    → tcp://192.168.99.100:2376
+    ```
 
-##### Go to project directory
-`> cd supplejack_docker`
+    **Note:** You need to run the `eval` command everytime you open a new terminal session/tab/window. I suggest you modify your `~/.bash_profile` or `~/.zshrc` file to automate these commands.
 
-##### Copy your ssh key to api, worker and manager
-```bash
-> cp ~/.ssh/id_rsa api/id_rsa
-> cp ~/.ssh/id_rsa manager/id_rsa
-> cp ~/.ssh/id_rsa worker/id_rsa
-```
 
-If you don't have one, refer to this [link](https://help.github.com/articles/generating-an-ssh-key/) to create one.
+### Running Docker Containers 🏁
 
-##### Build Docker containers (This will take a while)
-`> docker-compose build`
+1. Go to project directory.
 
-##### Run Docker containers (This will take a while as well)
-`> docker-compose up --no-recreate`
+    ```bash
+    → cd supplejack_docker
+    ```
 
-![docker-compose up](http://g.recordit.co/KwrKHds2S3.gif)
+2. Build Docker containers (This will take a while).
 
-If everything goes well, you should see all the containers running.
+    ```bash
+    → docker-compose build
+    ```
 
-```bash
-> docker ps
-CONTAINER ID        IMAGE                           COMMAND                  CREATED              STATUS              PORTS                         NAMES
-041abde3f0e5        supplejackdocker_sidekiq        "/w/w bundle exec sid"   About a minute ago   Up About a minute                                 sidekiq
-5a99010ee06e        redis:2.8                       "/w/w /entrypoint.sh "   About a minute ago   Up About a minute   0.0.0.0:6379->6379/tcp        redis
-95b8947516f3        supplejackdocker_mongodb        "/w/w mongod"            About a minute ago   Up About a minute   27017/tcp, 28017/tcp          mongodb
-5495d1b061fd        supplejackdocker_worker         "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3002->3000/tcp        worker
-79c17972ad94        supplejackdocker_solr           "/w/w java -jar start"   About a minute ago   Up About a minute   0.0.0.0:8983->8983/tcp        solr
-2ffe6b686f51        supplejackdocker_api            "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3000->3000/tcp        api
-a49c08cf69e5        supplejackdocker_manager        "/w/w bundle exec rai"   About a minute ago   Up About a minute   0.0.0.0:3001->3000/tcp        manager
-ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   2 days ago           Up 2 days                                         weaveproxy
-40770b440599        weaveworks/weave:1.4.2          "/home/weave/weaver -"   2 days ago           Up 2 days                                         weave
-4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago           Up 2 days           443/tcp, 0.0.0.0:80->80/tcp   dinghy_http_prox
-```
+3.  Run Docker containers (This will take a while as well).
 
-##### Access Supplejack components
+    ```bash
+    → docker-compose up
+    ```
 
-```
-API: api.docker:3000
-Manager: manager.docker:3001
-Worker: worker.docker:3002/sidekiq
-Solr: solr.docker:8983/solr/#/collection1
-MongoDB Data: Mounted in host data/db - mongodb.weave.local:27017
-Redis: redis://redis.weave.local:6379/0
-```
+    If everything goes well, you should see all the containers running.
 
-##### Stop Docker containers and cleanup
-Everytime you stop Docker containers, it is ideal to remove them as well. This is because everytime you run `docker-compose up`, it will create new docker containers. This is normal, but annoying because it will also run old docker containers.
+    ```bash
+    → docker ps
+    ```
 
-`> docker-compose stop && docker-compose rm -v`
+    ```bash
+    CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES                                                              
+b82c59b64d2e        supplejackdocker_sidekiq   "bundle exec sidekiq"    57 seconds ago      Up 56 seconds                                sidekiq                                                            
+3ed5cf88d125        supplejackdocker_worker    "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3002->3000/tcp   worker                                                             
+7e92bb3df879        supplejackdocker_manager   "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3001->3000/tcp   manager                                                            
+ae32635f4802        supplejackdocker_api       "bundle exec rails s "   58 seconds ago      Up 57 seconds       0.0.0.0:3000->3000/tcp   api                                                                
+dad90c3e0039        redis:2.8                  "docker-entrypoint.sh"   58 seconds ago      Up 57 seconds       0.0.0.0:6379->6379/tcp   redis                                                              
+a4e536734a7b        supplejackdocker_solr      "java -jar start.jar"    59 seconds ago      Up 57 seconds       0.0.0.0:8983->8983/tcp   solr                                                               
+47fba6738e23        mongo:2.6.12               "/entrypoint.sh mongo"   17 hours ago        Up 57 seconds       27017/tcp                supplejackdocker_mongodb_1
+    ```
 
-You should end up with 3 docker containers `weaveproxy`, `weave` and `dinghy_http_proxy`.
+### Seeding Data
+
+The Supplejack components are connected by API keys. Before start using it, make sure to run the following commands to generate default users.
 
 ```bash
-> docker ps
-CONTAINER ID        IMAGE                           COMMAND                  CREATED             STATUS              PORTS                         NAMES
-ef75240f57c2        weaveworks/weaveexec:1.4.2      "/home/weave/weavepro"   2 days ago          Up 2 days                                         weaveproxy
-40770b440599        weaveworks/weave:1.4.2          "/home/weave/weaver -"   2 days ago          Up 2 days                                         weave
-4a9a0d3ec048        codekitchen/dinghy-http-proxy   "/app/docker-entrypoi"   2 days ago          Up 2 days           0.0.0.0:80->80/tcp, 443/tcp   dinghy_http_proxy
+→ docker exec -it manager rake docker:seed
+→ docker exec -it worker rake docker:seed
+→ docker exec -it api rake docker:seed
+```
+
+This will generate the following user and keys.
+
+```yaml
+Manager:    
+    email: info@digitalnz.org
+    password: password
+    authentication_token: 'managerkey'
+
+Worker:
+    authentication_token: 'workerkey'
+
+API:
+    api_key: 'apikey'
+```
+
+To access the components, you need to use the Docker Host's IP address.
+
+```bash
+→ echo $DOCKER_HOST
+→ tcp://192.168.99.100:2376
+```
+
+Use the appropriate ports to access each components.
+
+```yaml
+→ api: http://192.168.99.100:3000/records.json?api_key=apikey
+→ manager: http://192.168.99.100:3001
+→ worker: http://192.168.99.100:3002
+→ sidekiq: http://192.168.99.100:3002/sidekiq
+→ solr: http://192.168.99.100:8983/solr
 ```
 
 ### Questions/Issues?
-File a new [issue](https://github.com/DigitalNZ/supplejack_docker/issues/new) if you have questions or issues.
+File a new [issue](https://github.com/digitalnz/supplejack_docker/issues/new) if you have questions or issues.
 
 ### Contributing
 
-1. Fork it ( https://github.com/DigitalNZ/supplejack_docker/fork )
+1. Fork it ( https://github.com/digitalnz/supplejack_docker/fork )
 2. Create your feature branch (`git checkout -b my-awesome-feature`)
 3. Commit your changes (`git commit -am 'Add my awesome feature!'`)
 4. Push to the branch (`git push origin my-awesome-feature`)
