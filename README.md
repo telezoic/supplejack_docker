@@ -74,7 +74,7 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
     → cd supplejack_docker
     ```
 
-2. Build Docker containers (This will take a while).
+2. Build Docker containers (This will take a while). Note: inside `manager/config` folder, copy the `application.yml.docker` to `application.yml` before running the command below.
 
     ```bash
     → docker-compose build
