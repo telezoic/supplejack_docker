@@ -89,6 +89,7 @@ services:
     container_name: api
     restart: always
     depends_on:
+      - redis
       - solr
       - mongodb
     networks:
@@ -98,6 +99,7 @@ services:
       SOLR_PING: http://solr:8983/solr/admin/ping
       SOLR_URL: http://solr:8983/solr
       WORKER_API_URL: http://worker:3000
+      REDIS_URL: redis://redis:6379/0
 
 volumes:
   mongodb:
