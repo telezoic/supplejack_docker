@@ -128,7 +128,7 @@ API:
     api_key: 'apikey'
 ```
 
-To access the components, you need to use the Docker Host's IP address.
+To access the components, you need to use your Docker machine's host IP address.
 
 ```bash
 → echo $DOCKER_HOST
