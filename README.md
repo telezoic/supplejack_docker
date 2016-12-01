@@ -153,16 +153,12 @@ Use the appropriate ports to access each components.
 
 
 - Know your Record Schema.
-    
+
     This stack comes with a default [schema](https://github.com/DigitalNZ/supplejack_api_app/blob/master/app/supplejack_api/record_schema.rb) for you to get started.
 
     An example [parser](https://gist.github.com/hapiben/c904e581ea944b70533bb5fdf25efaa7) is also available to match the current Record Schema.
 
-### Still missing
 
-- Resque container is not yet included in this repo. Resque sits inside the API. The purpose of Resque is to automatically index records after you do a harvest. Indexing could be done manually.
-
-    
 ### Questions/Issues?
 File a new [issue](https://github.com/digitalnz/supplejack_docker/issues/new) if you have questions or issues.
 
