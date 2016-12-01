@@ -101,6 +101,44 @@ services:
       WORKER_API_URL: http://worker:3000
       REDIS_URL: redis://redis:6379/0
 
+  resque:
+    build: ./api
+    command: bundle exec rake environment resque:workers QUEUE=solr_index COUNT=3
+    container_name: resque
+    restart: always
+    depends_on:
+      - redis
+      - solr
+      - mongodb
+      - api
+    networks:
+      - backend
+    environment:
+      MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8983/solr/admin/ping
+      SOLR_URL: http://solr:8983/solr
+      WORKER_API_URL: http://worker:3000
+      REDIS_URL: redis://redis:6379/0
+
+  scheduler:
+    build: ./api
+    command: rake resque:scheduler
+    container_name: scheduler
+    restart: always
+    depends_on:
+      - redis
+      - solr
+      - mongodb
+      - api
+    networks:
+      - backend
+    environment:
+      MONGOID_HOSTS: mongodb:27017
+      SOLR_PING: http://solr:8983/solr/admin/ping
+      SOLR_URL: http://solr:8983/solr
+      WORKER_API_URL: http://worker:3000
+      REDIS_URL: redis://redis:6379/0
+
 volumes:
   mongodb:
 
