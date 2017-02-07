@@ -6,7 +6,7 @@ services:
     ports:
     - 8983:8983:443
   api:
-    git_url: git@github.com:telezoic/supplejack_api.git #remove _app
+    git_url: git@github.com:telezoic/supplejack_api_app.git 
     git_branch: master
     ports:
     - 3000:3000:443
