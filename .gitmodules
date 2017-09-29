@@ -1,12 +1,12 @@
 [submodule "manager"]
 	path = manager
-	url = git@github.com:telezoic/supplejack_manager.git
+	url = https://github.com/telezoic/supplejack_manager.git
 [submodule "worker"]
 	path = worker
-	url = git@github.com:telezoic/supplejack_worker.git
+	url = https://github.com/telezoic/supplejack_worker.git
 [submodule "api"]
 	path = api
-	url = git@github.com:telezoic/supplejack_api_app.git
+	url = https://github.com/telezoic/supplejack_api_app.git
 [submodule "solr"]
 	path = solr
-	url = git@github.com:telezoic/supplejack_solr.git
+	url = https://github.com/telezoic/supplejack_solr.git
