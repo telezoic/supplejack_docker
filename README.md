@@ -93,14 +93,14 @@ Docker implementation of Supplejack stack (API, Manager, Worker, MongoDB, Redis 
     ```
 
     ```bash
-    CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES                                                              
-b82c59b64d2e        supplejackdocker_sidekiq   "bundle exec sidekiq"    57 seconds ago      Up 56 seconds                                sidekiq                                                            
-3ed5cf88d125        supplejackdocker_worker    "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3002->3000/tcp   worker                                                             
-7e92bb3df879        supplejackdocker_manager   "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3001->3000/tcp   manager                                                            
-ae32635f4802        supplejackdocker_api       "bundle exec rails s "   58 seconds ago      Up 57 seconds       0.0.0.0:3000->3000/tcp   api                                                                
-dad90c3e0039        redis:2.8                  "docker-entrypoint.sh"   58 seconds ago      Up 57 seconds       0.0.0.0:6379->6379/tcp   redis                                                              
-a4e536734a7b        supplejackdocker_solr      "java -jar start.jar"    59 seconds ago      Up 57 seconds       0.0.0.0:8983->8983/tcp   solr                                                               
-47fba6738e23        mongo:2.6.12               "/entrypoint.sh mongo"   17 hours ago        Up 57 seconds       27017/tcp                supplejackdocker_mongodb_1
+    CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                    NAMES
+    b82c59b64d2e        supplejackdocker_sidekiq   "bundle exec sidekiq"    57 seconds ago      Up 56 seconds                                sidekiq
+    3ed5cf88d125        supplejackdocker_worker    "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3002->3000/tcp   worker
+    7e92bb3df879        supplejackdocker_manager   "bundle exec rails s "   57 seconds ago      Up 56 seconds       0.0.0.0:3001->3000/tcp   manager
+    ae32635f4802        supplejackdocker_api       "bundle exec rails s "   58 seconds ago      Up 57 seconds       0.0.0.0:3000->3000/tcp   api
+    dad90c3e0039        redis:2.8                  "docker-entrypoint.sh"   58 seconds ago      Up 57 seconds       0.0.0.0:6379->6379/tcp   redis
+    a4e536734a7b        supplejackdocker_solr      "java -jar start.jar"    59 seconds ago      Up 57 seconds       0.0.0.0:8983->8983/tcp   solr
+    47fba6738e23        mongo:2.6.12               "/entrypoint.sh mongo"   17 hours ago        Up 57 seconds       27017/tcp                supplejackdocker_mongodb_1
     ```
 
 ### Seeding Data
